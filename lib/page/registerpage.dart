@@ -1,33 +1,51 @@
-import 'package:attendancehong2/page/forgotpasswordpage.dart';
+// ignore_for_file: prefer_const_constructors
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-class LoginPage extends StatefulWidget {
-  final VoidCallback showRegisterPage;
-  const LoginPage({super.key, required this.showRegisterPage});
+class RegisterPage extends StatefulWidget {
+  final VoidCallback showLoginPage;
+  const RegisterPage({
+    super.key,
+    required this.showLoginPage,
+  });
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  State<RegisterPage> createState() => _RegisterPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _RegisterPageState extends State<RegisterPage> {
   // text Controller
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
-
-  Future signIn() async {
-    await FirebaseAuth.instance.signInWithEmailAndPassword(
-      email: _emailController.text.trim(),
-      password: _passwordController.text.trim(),
-    );
-  }
+  final _confirmPasswordController = TextEditingController();
 
   @override
   void dispose() {
     _emailController.dispose();
     _passwordController.dispose();
+    _confirmPasswordController.dispose();
     super.dispose();
   }
+
+  Future signUp() async {
+    if(passwordConfirm()) {
+      await FirebaseAuth.instance.createUserWithEmailAndPassword(
+      email: _emailController.text.trim(),
+      password: _passwordController.text.trim(),
+    );
+    }
+  }
+
+  bool passwordConfirm () {
+    if(_passwordController.text.trim() == 
+    _confirmPasswordController.text.trim()) {
+      return true;
+    }else {
+      return false;
+    }
+  }
+  
 
   @override
   Widget build(BuildContext context) {
@@ -39,11 +57,11 @@ class _LoginPageState extends State<LoginPage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Icon(
-                  Icons.calendar_month,
+                  Icons.sign_language,
                   size: 60,
                 ),
                 Text(
-                  'Attendance App!',
+                  'Sign up!',
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 40,
@@ -73,7 +91,9 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ),
                 ),
-                SizedBox(height: 10),
+                SizedBox(
+                  height: 10
+                ),
 
                 // Password 텍스트필드
                 Padding(
@@ -100,26 +120,29 @@ class _LoginPageState extends State<LoginPage> {
                 ),
                 SizedBox(height: 10),
 
-                GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) {
-                          return ForgotPasswordPage();
-                        },
+                // Confirm Password 텍스트필드
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.grey[100],
+                      border: Border.all(color: Colors.white),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 20.0),
+                      child: TextField(
+                        controller: _confirmPasswordController,
+                        //비번 안보이게 표시하는 것
+                        obscureText: true,
+                        decoration: InputDecoration(
+                          border: InputBorder.none,
+                          hintText: 'Confirm Password',
+                        ),
                       ),
-                    );
-                  },
-                  child: Text(
-                    'Forgot password',
-                    style: TextStyle(
-                      color: Colors.blue,
-                      fontWeight: FontWeight.bold,
                     ),
                   ),
                 ),
-
                 SizedBox(height: 10),
 
                 // 로그인 버튼
@@ -131,7 +154,7 @@ class _LoginPageState extends State<LoginPage> {
                         child: Container(),
                       ),
                       GestureDetector(
-                        onTap: signIn,
+                        onTap: signUp,
                         child: Container(
                           padding: EdgeInsets.all(20),
                           decoration: BoxDecoration(
@@ -139,7 +162,7 @@ class _LoginPageState extends State<LoginPage> {
                               borderRadius: BorderRadius.circular(12)),
                           child: Center(
                             child: Text(
-                              'Sign In',
+                              'Sign Up',
                               style: TextStyle(
                                   color: Colors.white,
                                   fontWeight: FontWeight.bold,
@@ -157,15 +180,15 @@ class _LoginPageState extends State<LoginPage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      'Not a member?',
+                      'I am a member!',
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                       ),
                     ),
                     GestureDetector(
-                      onTap: widget.showRegisterPage,
+                      onTap: widget.showLoginPage,
                       child: Text(
-                        '   Register Now',
+                        '   Login Now',
                         style: TextStyle(
                           color: Colors.blue,
                           fontWeight: FontWeight.bold,

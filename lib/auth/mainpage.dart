@@ -1,3 +1,4 @@
+import 'package:attendancehong2/auth/authpage.dart';
 import 'package:attendancehong2/page/homepage.dart';
 import 'package:attendancehong2/page/login_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -15,7 +16,7 @@ class MainPage extends StatelessWidget {
           if(snapshot.hasData) {
             return HomePage();
           } else {
-            return LoginPage();
+            return AuthPage();
           }
         }
 

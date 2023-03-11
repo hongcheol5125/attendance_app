@@ -1,5 +1,5 @@
 import 'package:attendancehong2/firebase_options.dart';
-import 'package:attendancehong2/page/mainpage.dart';
+import 'package:attendancehong2/auth/mainpage.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 
